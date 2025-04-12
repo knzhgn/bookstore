@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: bookstore
+    env: python
+    buildCommand: ""
+    startCommand: ./start.sh
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: bookstore.settings
+      - key: PYTHON_VERSION
+        value: 3.11
