@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>📘 Книжный Мир</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f2f2f7;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #fff;
+      border-bottom: 1px solid #e5e5ea;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: #007aff;
+    }
+    .card {
+      border: none;
+      border-radius: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+      padding: 1rem;
+    }
+    .card-title a {
+      color: #007aff;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .btn-outline-primary {
+      border-radius: 12px;
+    }
+    .emoji {
+      font-size: 1.4rem;
+      margin-right: 6px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 📱 Навигация -->
+<nav class="navbar navbar-light">
+  <div class="container d-flex justify-content-between">
+    <a class="navbar-brand" href="/">📘 Книжный Мир</a>
+    <a href="/cart/" class="btn btn-outline-primary">🛒 Корзина</a>
+  </div>
+</nav>
+
+<!-- 📚 Каталог -->
+<div class="container mt-5">
+  <h2 class="text-center mb-4">📚 Новинки недели</h2>
+
+  {% if books %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for book in books %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span class="emoji">📖</span>
+            <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+          </h5>
+          <p class="text-muted">✍️ Автор: <strong>{{ book.author.name }}</strong></p>
+          <p>📚 Жанры: {{ book.genres.all|join:", " }}</p>
+          <p>🏷️ <strong>{{ book.price }} ₸</strong></p>
+          <p>📅 Дата публикации: {{ book.published_date }}</p>
+          <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary mt-2">🔍 Подробнее</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-secondary text-center mt-5">
+    🫥 Пока нет доступных книг.
+  </div>
+  {% endif %}
+</div>
+
+<!-- ⚙ Подвал -->
+<footer class="mt-5">© 2025 Книжный Мир · Сделано с ❤️ для учебы</footer>
+
+</body>
+</html>
