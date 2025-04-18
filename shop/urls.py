@@ -9,3 +9,11 @@ urlpatterns = [
     path('remove-from-cart/<int:pk>/', views.remove_from_cart, name='remove_from_cart'),
     path('checkout/', views.checkout, name='checkout'),
 ]
+from django.contrib.auth.views import LogoutView
+
+urlpatterns += [
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('profile/', views.profile_view, name='profile'),
+]

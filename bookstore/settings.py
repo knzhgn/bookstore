@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+*jh7ydu21*%*^hvcwc8344=wvmi&*1q_@11+0rbjh4tv2kvf0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bookstore-wmmi.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
