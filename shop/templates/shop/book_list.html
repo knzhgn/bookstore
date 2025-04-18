@@ -55,6 +55,15 @@
     <a href="/cart/" class="btn btn-outline-primary">🛒 Корзина</a>
   </div>
 </nav>
+<div class="text-end mb-3">
+  {% if user.is_authenticated %}
+    <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">👤 {{ user.username }}</a>
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Выйти</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-primary btn-sm me-2">🔑 Вход</a>
+    <a href="{% url 'signup' %}" class="btn btn-success btn-sm">📝 Регистрация</a>
+  {% endif %}
+</div>
 
 <!-- 📚 Каталог -->
 <div class="container mt-5">
@@ -88,7 +97,7 @@
 </div>
 
 <!-- ⚙ Подвал -->
-<footer class="mt-5">© 2025 Книжный Мир · Сделано с ❤️ для учебы</footer>
+<footer class="mt-5">© 2025 Книжный Мир </footer>
 
 </body>
 </html>
