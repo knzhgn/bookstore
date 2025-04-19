@@ -35,7 +35,7 @@ body {
 
 /* 📚 Карточки книг */
 .card {
-    background: linear-gradient(135deg, #f6d8ff, #d6f0ff); /* 💜 + 💙 фон */
+ background: linear-gradient(135deg, #f6d8ff, #d6f0ff); /* 💜 + 💙 фон */
   border-radius: 20px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
