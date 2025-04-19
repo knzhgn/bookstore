@@ -1,23 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Профиль</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI';">
+{% extends 'shop/base.html' %}
+{% block title %}Профиль{% endblock %}
 
-<div class="container mt-5" style="max-width: 600px;">
-  <div class="card p-4 shadow-sm rounded-4">
-    <h2 class="text-center mb-4">👤 Профиль</h2>
-    <p><strong>Имя пользователя:</strong> {{ request.user.username }}</p>
-    <p><strong>Email:</strong> {{ request.user.email }}</p>
-    <p><strong>Дата входа:</strong> {{ request.user.last_login }}</p>
-    <div class="text-end">
-      <a href="{% url 'logout' %}" class="btn btn-outline-danger">🚪 Выйти</a>
-    </div>
+{% block content %}
+<div class="container" style="max-width: 600px;">
+  <div class="card p-4 mt-5 rounded-4 shadow-sm">
+    <h2 class="mb-3">👤 Ваш профиль</h2>
+    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <hr>
+    <p class="text-muted">Добро пожаловать! Здесь будут появляться ваши данные и история заказов.</p>
   </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

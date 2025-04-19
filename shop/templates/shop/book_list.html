@@ -1,103 +1,42 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>📘 Книжный Мир</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f2f2f7;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    .navbar {
-      background-color: #fff;
-      border-bottom: 1px solid #e5e5ea;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-    }
-    .navbar-brand {
-      font-weight: 600;
-      font-size: 1.6rem;
-      color: #007aff;
-    }
-    .card {
-      border: none;
-      border-radius: 20px;
-      background-color: #ffffff;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
-      padding: 1rem;
-    }
-    .card-title a {
-      color: #007aff;
-      font-weight: 500;
-      text-decoration: none;
-    }
-    .btn-outline-primary {
-      border-radius: 12px;
-    }
-    .emoji {
-      font-size: 1.4rem;
-      margin-right: 6px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-  </style>
-</head>
-<body>
+{% extends 'shop/base.html' %}
+{% block title %}Каталог книг{% endblock %}
 
-<!-- 📱 Навигация -->
-<nav class="navbar navbar-light">
-  <div class="container d-flex justify-content-between">
-    <a class="navbar-brand" href="/">📘 Книжный Мир</a>
-    <a href="/cart/" class="btn btn-outline-primary">🛒 Корзина</a>
-  </div>
-</nav>
-<div class="text-end mb-3">
-  {% if user.is_authenticated %}
-    <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">👤 {{ user.username }}</a>
-    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Выйти</a>
-  {% else %}
-    <a href="{% url 'login' %}" class="btn btn-primary btn-sm me-2">🔑 Вход</a>
-    <a href="{% url 'signup' %}" class="btn btn-success btn-sm">📝 Регистрация</a>
-  {% endif %}
-</div>
-
-<!-- 📚 Каталог -->
-<div class="container mt-5">
-  <h2 class="text-center mb-4">📚 Новинки недели</h2>
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center fw-bold mb-5" style="color: #0363fe; font-size: 2rem;">
+    📚 Наши книги
+  </h2>
 
   {% if books %}
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for book in books %}
     <div class="col">
-      <div class="card h-100">
+      <div class="card h-100 shadow border-0 rounded-4">
         <div class="card-body">
-          <h5 class="card-title">
-            <span class="emoji">📖</span>
-            <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+          <h5 class="card-title fw-semibold mb-2">
+            <a href="{% url 'book_detail' book.pk %}" class="text-decoration-none" style="color: #3b82f6;">
+              📘 {{ book.title }}
+            </a>
           </h5>
-          <p class="text-muted">✍️ Автор: <strong>{{ book.author.name }}</strong></p>
-          <p>📚 Жанры: {{ book.genres.all|join:", " }}</p>
-          <p>🏷️ <strong>{{ book.price }} ₸</strong></p>
-          <p>📅 Дата публикации: {{ book.published_date }}</p>
-          <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary mt-2">🔍 Подробнее</a>
+          <p class="text-muted mb-1">✍️ <strong>{{ book.author.name }}</strong></p>
+          <p class="mb-1">🏷️ Жанры: 
+            <span style="color:#6366f1;">{{ book.genres.all|join:", " }}</span>
+          </p>
+          <p class="mb-1">💰 <strong style="color: #10b981;">{{ book.price }} ₸</strong></p>
+          <p class="text-secondary mb-3">📅 <small>Дата публикации: {{ book.published_date }}</small></p>
+
+          <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary w-100 rounded-pill">
+            🔍 Подробнее
+          </a>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
   {% else %}
-  <div class="alert alert-secondary text-center mt-5">
+  <div class="alert alert-light text-center border mt-5 rounded-3 shadow-sm">
     🫥 Пока нет доступных книг.
   </div>
   {% endif %}
 </div>
-
-<!-- ⚙ Подвал -->
-<footer class="mt-5">© 2025 Книжный Мир </footer>
-
-</body>
-</html>
+{% endblock %}
