@@ -1,42 +1,42 @@
-{% extends 'shop/base.html' %}
-{% block title %}Книжный Мир{% endblock %}
+  {% extends 'shop/base.html' %}
+  {% block title %}Книжный Мир{% endblock %}
 
-{% block content %}
-<div class="container my-5">
-  <h2 class="text-center fw-bold mb-5" style="color: #0363fe; font-size: 2rem;">
-    📚 Наши книги
-  </h2>
+  {% block content %}
+  <div class="container my-5">
+    <h2 class="text-center fw-bold mb-5" style="color: #0363fe; font-size: 2rem;">
+      📚 Наши книги
+    </h2>
 
-  {% if books %}
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    {% for book in books %}
-    <div class="col">
-      <div class="card h-100 shadow border-0 rounded-4">
-        <div class="card-body">
-          <h5 class="card-title fw-semibold mb-2">
-            <a href="{% url 'book_detail' book.pk %}" class="text-decoration-none" style="color: #3b82f6;">
-              📘 {{ book.title }}
+    {% if books %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for book in books %}
+      <div class="col">
+        <div class="card h-100 shadow border-0 rounded-4">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold mb-2">
+              <a href="{% url 'book_detail' book.pk %}" class="text-decoration-none" style="color: #3b82f6;">
+                📘 {{ book.title }}
+              </a>
+            </h5>
+            <p class="text-muted mb-1">✍️ <strong>{{ book.author.name }}</strong></p>
+            <p class="mb-1">🏷️ Жанры: 
+              <span style="color:#6366f1;">{{ book.genres.all|join:", " }}</span>
+            </p>
+            <p class="mb-1">💰 <strong style="color: #10b981;">{{ book.price }} ₸</strong></p>
+            <p class="text-secondary mb-3">📅 <small>Дата публикации: {{ book.published_date }}</small></p>
+
+            <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary w-100 rounded-pill">
+              🔍 Подробнее
             </a>
-          </h5>
-          <p class="text-muted mb-1">✍️ <strong>{{ book.author.name }}</strong></p>
-          <p class="mb-1">🏷️ Жанры: 
-            <span style="color:#6366f1;">{{ book.genres.all|join:", " }}</span>
-          </p>
-          <p class="mb-1">💰 <strong style="color: #10b981;">{{ book.price }} ₸</strong></p>
-          <p class="text-secondary mb-3">📅 <small>Дата публикации: {{ book.published_date }}</small></p>
-
-          <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary w-100 rounded-pill">
-            🔍 Подробнее
-          </a>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="alert alert-light text-center border mt-5 rounded-3 shadow-sm">
+      🫥 Пока нет доступных книг.
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="alert alert-light text-center border mt-5 rounded-3 shadow-sm">
-    🫥 Пока нет доступных книг.
-  </div>
-  {% endif %}
-</div>
-{% endblock %}
+  {% endblock %}

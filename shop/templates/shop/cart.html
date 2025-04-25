@@ -5,14 +5,20 @@
 <div class="container my-5">
   <h2 class="text-center mb-4" style="color: #ff6b6b;">🛒 Ваша корзина</h2>
 
-  {% if books %}
+  {% if books_with_quantity %}
     <ul class="list-group mb-4">
-      {% for book in books %}
-        <li class="list-group-item d-flex justify-content-between align-items-center rounded-3 shadow-sm mb-2">
-          <span>📘 {{ book.title }}</span>
-          <a href="{% url 'remove_from_cart' book.pk %}" class="btn btn-outline-danger btn-sm">🗑 Удалить</a>
-        </li>
-      {% endfor %}
+      {% for book, quantity in books_with_quantity %}
+  <li class="list-group-item d-flex justify-content-between align-items-center rounded-3 shadow-sm mb-2">
+    <span class="fw-semibold">📘 {{ book.title }}</span>
+
+    <div class="d-flex align-items-center gap-2">
+      <a href="{% url 'decrease_quantity' book.pk %}" class="btn btn-outline-secondary btn-sm">➖</a>
+      <span class="badge bg-light text-dark px-3 py-2">{{ quantity }}</span>
+      <a href="{% url 'increase_quantity' book.pk %}" class="btn btn-outline-secondary btn-sm">➕</a>
+      <a href="{% url 'remove_from_cart' book.pk %}" class="btn btn-outline-danger btn-sm ms-2">🗑 Удалить</a>
+    </div>
+  </li>
+{% endfor %}
     </ul>
     <div class="text-end">
       <a href="{% url 'checkout' %}" class="btn btn-primary">✅ Оформить заказ</a>

@@ -3,16 +3,19 @@
 
 {% block content %}
 <div class="container my-5" style="max-width: 700px;">
-  <div class="card p-4 rounded-4 shadow-sm">
-    <h2 class="mb-3" style="color: #3b82f6;">📖 {{ book.title }}</h2>
-    <p><strong>✍️ Автор:</strong> {{ book.author.name }}</p>
-    <p><strong>🎨 Жанры:</strong> {{ book.genres.all|join:", " }}</p>
-    <p><strong>📅 Дата публикации:</strong> {{ book.published_date }}</p>
-    <p><strong>💰 Цена:</strong> {{ book.price }} ₸</p>
+  <div class="card p-4 rounded-4 shadow-sm border-0">
+    <h2 class="mb-4 fw-bold text-primary" style="font-size: 1.75rem;">📖 {{ book.title }}</h2>
 
-    <div class="mt-4">
-      <a href="{% url 'add_to_cart' book.pk %}" class="btn btn-outline-primary">➕ Добавить в корзину</a>
-    </div>
+    <ul class="list-unstyled mb-4">
+      <li class="mb-2"><strong>✍️ Автор:</strong> {{ book.author.name }}</li>
+      <li class="mb-2"><strong>🎨 Жанры:</strong> {{ book.genres.all|join:", " }}</li>
+      <li class="mb-2"><strong>📅 Дата публикации:</strong> {{ book.published_date }}</li>
+      <li class="mb-2"><strong>💰 Цена:</strong> <span class="text-success fw-semibold">{{ book.price }} ₸</span></li>
+    </ul>
+
+    <a href="{% url 'add_to_cart' book.pk %}" class="btn btn-primary w-100 rounded-pill">
+      ➕ В корзину
+    </a>
   </div>
 </div>
 {% endblock %}

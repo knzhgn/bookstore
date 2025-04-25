@@ -16,4 +16,6 @@ urlpatterns += [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
+    path('cart/increase/<int:pk>/', views.increase_quantity, name='increase_quantity'),
+    path('cart/decrease/<int:pk>/', views.decrease_quantity, name='decrease_quantity'),
 ]

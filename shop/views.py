@@ -16,45 +16,59 @@ def book_detail(request, pk):
 
 @login_required
 def add_to_cart(request, pk):
-    cart = request.session.get('cart', [])
-    if pk not in cart:
-        cart.append(pk)
-        request.session['cart'] = cart
+    cart = request.session.get('cart', {})
+    # orders = OrderItem.objects.filter(user_id=request.user.id)
+    # order = OrderItem.objects.get(id=pk)
+    pk_str = str(pk)
+    if pk_str in cart:
+        cart[int(pk_str)] += 1
+    else:
+        cart[int(pk_str)] = 1   
+    request.session['cart'] = cart
     return redirect('view_cart')
-
 @login_required
 def view_cart(request):
-    cart = request.session.get('cart', [])
-    books = Book.objects.filter(pk__in=cart)
-    return render(request, 'shop/cart.html', {'books': books})
+    cart = request.session.get('cart', {})
+
+    if isinstance(cart, list):  # 👈 сбрасываем старую корзину
+        cart = {}
+        request.session['cart'] = cart
+
+    books = Book.objects.filter(pk__in=cart.keys())
+    books_with_quantity = [(book, cart[str(book.pk)]) for book in books]
+    return render(request, 'shop/cart.html', {'books_with_quantity': books_with_quantity})
+
 
 @login_required
 def remove_from_cart(request, pk):
-    cart = request.session.get('cart', [])
-    if pk in cart:
-        cart.remove(pk)
-        request.session['cart'] = cart
+    cart = request.session.get('cart', {})
+    pk_str = str(pk)
+    if pk_str in cart:
+        del cart[pk_str]
+    request.session['cart'] = cart
     return redirect('view_cart')
+
+from .models import OrderItem  
 
 @login_required
 def checkout(request):
-    cart = request.session.get('cart', [])
-    books = Book.objects.filter(pk__in=cart)
+    cart = request.session.get('cart', {})
+    books = Book.objects.filter(pk__in=cart.keys())
 
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         if name and phone:
             order = Order.objects.create(name=name, phone=phone)
-            order.books.set(books)
-            order.save()
+            for book in books:
+                OrderItem.objects.create(order=order, book=book, quantity=cart[str(book.pk)])
             request.session['cart'] = []
             return render(request, 'shop/checkout_success.html', {'name': name})
         else:
             messages.error(request, "Пожалуйста, заполните все поля.")
-
-    return render(request, 'shop/checkout.html', {'books': books})
-
+    
+    books_with_quantity = [(book, cart[str(book.pk)]) for book in books]
+    return render(request, 'shop/checkout.html', {'books_with_quantity': books_with_quantity})
 def signup_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -83,3 +97,18 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('book_list')
+def increase_quantity(request, pk):
+    cart = request.session.get('cart', {})
+    cart[str(pk)] = cart.get(str(pk), 1) + 1
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
+def decrease_quantity(request, pk):
+    cart = request.session.get('cart', {})
+    if str(pk) in cart:
+        if cart[str(pk)] > 1:
+            cart[str(pk)] -= 1
+        else:
+            del cart[str(pk)]  # если 0 — удалить
+    request.session['cart'] = cart
+    return redirect('view_cart')
