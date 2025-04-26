@@ -5,10 +5,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
 from .models import Book, Author, Order
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 def book_list(request):
     books = Book.objects.all()
-    return render(request, 'shop/book_list.html', {'books': books})
+    paginator = Paginator(books, 6)  # Показывать по 6 книг на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'shop/book_list.html', {'page_obj': page_obj})
+
 
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
@@ -17,15 +22,14 @@ def book_detail(request, pk):
 @login_required
 def add_to_cart(request, pk):
     cart = request.session.get('cart', {})
-    # orders = OrderItem.objects.filter(user_id=request.user.id)
-    # order = OrderItem.objects.get(id=pk)
     pk_str = str(pk)
     if pk_str in cart:
-        cart[int(pk_str)] += 1
+        cart[pk_str] += 1
     else:
-        cart[int(pk_str)] = 1   
+        cart[pk_str] = 1   
     request.session['cart'] = cart
     return redirect('view_cart')
+
 @login_required
 def view_cart(request):
     cart = request.session.get('cart', {})

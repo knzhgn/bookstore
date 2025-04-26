@@ -1,42 +1,85 @@
-  {% extends 'shop/base.html' %}
-  {% block title %}Книжный Мир{% endblock %}
+{% extends 'shop/base.html' %}
+{% block title %}Книжный Мир{% endblock %}
 
-  {% block content %}
-  <div class="container my-5">
-    <h2 class="text-center fw-bold mb-5" style="color: #0363fe; font-size: 2rem;">
-      📚 Наши книги
-    </h2>
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center fw-bold mb-5" style="color: #0363fe; font-size: 2rem;">
+    📚 Наши книги
+  </h2>
 
-    {% if books %}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      {% for book in books %}
-      <div class="col">
-        <div class="card h-100 shadow border-0 rounded-4">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-2">
-              <a href="{% url 'book_detail' book.pk %}" class="text-decoration-none" style="color: #3b82f6;">
-                📘 {{ book.title }}
-              </a>
-            </h5>
-            <p class="text-muted mb-1">✍️ <strong>{{ book.author.name }}</strong></p>
-            <p class="mb-1">🏷️ Жанры: 
-              <span style="color:#6366f1;">{{ book.genres.all|join:", " }}</span>
-            </p>
-            <p class="mb-1">💰 <strong style="color: #10b981;">{{ book.price }} ₸</strong></p>
-            <p class="text-secondary mb-3">📅 <small>Дата публикации: {{ book.published_date }}</small></p>
-
-            <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary w-100 rounded-pill">
-              🔍 Подробнее
+  {% if page_obj %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for book in page_obj %}
+    <div class="col">
+      <div class="card h-100 shadow border-0 rounded-4">
+        <div class="card-body">
+          <h5 class="card-title fw-semibold mb-2">
+            <a href="{% url 'book_detail' book.pk %}" class="text-decoration-none" style="color: #3b82f6;">
+              📘 {{ book.title }}
             </a>
-          </div>
+          </h5>
+          <p class="text-muted mb-1">✍️ <strong>{{ book.author.name }}</strong></p>
+          <p class="mb-1">🏷️ Жанры: 
+            <span style="color:#6366f1;">{{ book.genres.all|join:", " }}</span>
+          </p>
+          <p class="mb-1">💰 <strong style="color: #10b981;">{{ book.price }} ₸</strong></p>
+          <p class="text-secondary mb-3">📅 <small>Дата публикации: {{ book.published_date }}</small></p>
+
+          <a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-primary w-100 rounded-pill">
+            🔍 Подробнее
+          </a>
         </div>
       </div>
-      {% endfor %}
     </div>
-    {% else %}
-    <div class="alert alert-light text-center border mt-5 rounded-3 shadow-sm">
-      🫥 Пока нет доступных книг.
-    </div>
-    {% endif %}
+    {% endfor %}
   </div>
-  {% endblock %}
+
+  <!-- Пагинация -->
+  <div class="d-flex justify-content-center mt-5">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&laquo;</span>
+          </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&raquo;</span>
+          </li>
+        {% endif %}
+        
+      </ul>
+    </nav>
+  </div>
+  <div class="text-center mb-4 text-muted" style="font-size: 1rem;">
+    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+  </div>  
+  {% else %}
+  <div class="alert alert-light text-center border mt-5 rounded-3 shadow-sm">
+    🫥 Пока нет доступных книг.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

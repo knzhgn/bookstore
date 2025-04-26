@@ -9,6 +9,9 @@
     <p><strong>Email:</strong> {{ user.email }}</p>
     <hr>
     <p class="text-muted">Добро пожаловать! Здесь будут появляться ваши данные и история заказов.</p>
+    <div class="mt-3">
+      <a class="btn btn-outline-warning" href="{% url 'reset_password' %}">🔁 Сменить пароль</a>
+    </div>    
   </div>
 </div>
 {% endblock %}

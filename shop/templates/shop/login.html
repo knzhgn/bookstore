@@ -10,9 +10,14 @@
       {{ form.as_p }}
       <button type="submit" class="btn btn-primary w-100">Войти</button>
     </form>
+    
+    <div class="text-center mt-2">
+      <a href="{% url 'reset_password' %}" style="color: #ff9900;">🔁 Забыли пароль?</a>
+    </div>
+    
     <div class="text-center mt-3">
       Нет аккаунта? <a href="{% url 'signup' %}" style="color: #0363fe;">Регистрация</a>
-    </div>
+    </div>    
    </div>
    <hr class="my-3">
    <div class="text-center">
